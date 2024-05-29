@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Club Project Repository</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <nav>
+        <ul>
+            <li><a href="#" id="home-link">Home</a></li>
+            <li><a href="#" id="projects-link">Project List</a></li>
+            <li><a href="#" id="create-link">Create Project</a></li>
+        </ul>
+    </nav>
+
+    <div id="content">
+        <div id="home">
+            <h1>Welcome to the Club Project Repository</h1>
+            <p>Use the navigation bar to explore projects or create a new one.</p>
+        </div>
+
+        <div id="project-list" class="hidden">
+            <h1>Project List</h1>
+            <input type="text" id="search-bar" placeholder="Search projects...">
+            <ul id="project-container"></ul>
+        </div>
+
+        <div id="create-project" class="hidden">
+            <h1>Create Project</h1>
+            <form id="project-form">
+                <label for="project-name">Project Name:</label>
+                <input type="text" id="project-name" required>
+                <label for="project-description">Project Description:</label>
+                <textarea id="project-description" required></textarea>
+                <button type="submit">Create</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="scripts.js"></script>
+</body>
+</html>
