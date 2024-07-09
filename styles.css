@@ -44,10 +44,14 @@ form label {
     margin: 0.5em 0 0.2em;
 }
 
-form input, form textarea, form button {
+form input, form button {
     margin-bottom: 1em;
     padding: 0.5em;
     font-size: 1em;
+}
+#editor-container{
+    height: 700px;
+    margin-bottom: 1em;
 }
 
 /* styles.css */

@@ -5,7 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Club Project Repository</title>
     <link rel="stylesheet" href="styles.css">
+    <!-- Quill CSS -->
+    <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
 </head>
+<!-- <header>
+    <a>프로젝트 저장소</a>
+</header> -->
 <body>
     <nav>
         <ul>
@@ -33,19 +38,22 @@
                 <label for="project-name">프로젝트 이름:</label>
                 <input type="text" id="project-name" required>
                 <label for="project-description">프로젝트 설명:</label>
-                <textarea id="project-description" required></textarea>
+                <!-- Quill editor container -->
+                <div id="editor-container"></div>
                 <button type="submit">만들기</button>
             </form>
         </div>
-            <div id="modal-container" class="modal-container">
-                <div class="modal-content">
-                    <span class="close-btn" onclick="closeModal()">&times;</span>
-                    <h2 id="modal-title"></h2>
-                    <p id="modal-description"></p>
-                </div>
+        <div id="modal-container" class="modal-container">
+            <div class="modal-content">
+                <span class="close-btn" onclick="closeModal()">&times;</span>
+                <h2 id="modal-title"></h2>
+                <p id="modal-description"></p>
             </div>
+        </div>
     </div>
 
+    <!-- Quill JS -->
+    <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
     <script src="scripts.js"></script>
 </body>
 </html>
