@@ -1,20 +1,24 @@
-/* styles.css */
-
 body {
-    font-family: Arial, sans-serif;
+    font-family: var(--presets-body2-font-family);
     margin: 0;
     padding: 0;
 }
 
+/* Navigation bar styling */
 nav {
     background-color: #333;
     color: #fff;
     padding: 1em;
+    position: fixed;
+    top: 65px; /* Adjusted to be below the search bar */
+    width: 100%;
+    z-index: 1; /* Ensure it stays on top of the content */
 }
 
 nav ul {
     list-style-type: none;
     padding: 0;
+    margin: 0;
 }
 
 nav ul li {
@@ -27,12 +31,60 @@ nav ul li a {
     text-decoration: none;
 }
 
+/* Search bar styling */
+.header {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 2; /* Ensure it stays on top of the nav bar */
+}
+
+.box {
+    width: 100%;
+    background-color: #333;
+    padding: 1em;
+}
+
+.element-search-input {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 8px 16px;
+    background-color: #ffffff;
+    border: 1px solid #dfdfdf;
+    width: 100%;
+    max-width: 600px; /* Adjusted to fit better */
+    margin: 0 auto; /* Center the search box */
+}
+
+.element-search-input .search {
+    width: 24px;
+    height: 24px;
+}
+
+.element-search-input .label {
+    flex: 1;
+    font-family: var(--presets-body2-font-family);
+    font-weight: var(--presets-body2-font-weight);
+    color: #828282;
+    font-size: var(--presets-body2-font-size);
+    letter-spacing: var(--presets-body2-letter-spacing);
+    line-height: var(--presets-body2-line-height);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    font-style: var(--presets-body2-font-style);
+}
+
 .hidden {
     display: none;
 }
 
+/* Content styling */
 #content {
-    padding: 2em;
+    padding: 100px 2em 2em; /* Adjusted to push content below fixed elements */
 }
 
 form {
@@ -49,12 +101,13 @@ form input, form button {
     padding: 0.5em;
     font-size: 1em;
 }
-#editor-container{
+
+#editor-container {
     height: 700px;
     margin-bottom: 1em;
 }
 
-/* styles.css */
+/* Modal styling */
 .modal-container {
     display: none;
     position: fixed;

@@ -126,6 +126,10 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     searchBar.addEventListener('input', () => {
+        homeSection.classList.add('hidden');
+        projectListSection.classList.remove('hidden');
+        createProjectSection.classList.add('hidden');
+        loadProjects();
         const searchQuery = searchBar.value.toLowerCase();
         const projects = getProjects();
         projectContainer.innerHTML = '';
