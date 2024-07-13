@@ -1,143 +1,66 @@
-document.addEventListener('DOMContentLoaded', () => {
-    const homeLink = document.getElementById('home-link');
-    const projectsLink = document.getElementById('projects-link');
-    const createLink = document.getElementById('create-link');
-
-    const homeSection = document.getElementById('home');
-    const projectListSection = document.getElementById('project-list');
-    const createProjectSection = document.getElementById('create-project');
-
-    const projectForm = document.getElementById('project-form');
-    const projectContainer = document.getElementById('project-container');
-    const searchBar = document.getElementById('search-bar');
-
-    // Initialize Quill editor
-    const quill = new Quill('#editor-container', {
-        theme: 'snow',
-        modules: {
-            toolbar: [
-                [{ 'font': [] }],
-                [{ 'header': [1, 2, false] }],
-                ['bold', 'italic', 'underline'],
-                [{ 'list': 'ordered'}, { 'list': 'bullet' }],
-                [{ 'script': 'sub'}, { 'script': 'super' }],
-                [{ 'indent': '-1'}, { 'indent': '+1' }],
-                [{ 'direction': 'rtl' }],
-                [{ 'color': [] }, { 'background': [] }],
-                [{ 'align': [] }],
-                ['link', 'image', 'video'],
-                ['clean'] 
-            ]
-        }
+document.addEventListener('DOMContentLoaded', function () {
+    // Quill editor 설정
+    var quill = new Quill('#editor-container', {
+        theme: 'snow'
     });
 
-    // Navigation functionality
-    homeLink.addEventListener('click', () => {
-        homeSection.classList.remove('hidden');
-        projectListSection.classList.add('hidden');
-        createProjectSection.classList.add('hidden');
-    });
-
-    projectsLink.addEventListener('click', () => {
-        homeSection.classList.add('hidden');
-        projectListSection.classList.remove('hidden');
-        createProjectSection.classList.add('hidden');
-        loadProjects();
-    });
-
-    createLink.addEventListener('click', () => {
-        homeSection.classList.add('hidden');
-        projectListSection.classList.add('hidden');
-        createProjectSection.classList.remove('hidden');
-    });
-
-    // Project form submission
-    projectForm.addEventListener('submit', (e) => {
+    // 폼 제출 이벤트 핸들러
+    document.getElementById('project-form').addEventListener('submit', function (e) {
         e.preventDefault();
-        const projectName = document.getElementById('project-name').value;
-        const projectDescription = quill.root.innerHTML;
+        var projectName = document.getElementById('project-name').value;
+        var projectDescription = quill.root.innerHTML;
 
-        const project = {
-            name: projectName,
-            description: projectDescription,
-            id: new Date().getTime()
-        };
+        addProjectToList(projectName, projectDescription);
 
-        saveProject(project);
-        projectForm.reset();
-        quill.setContents([]);
-        alert('Project created successfully!');
+        // 폼 초기화
+        document.getElementById('project-name').value = '';
+        quill.root.innerHTML = '';
     });
 
-    // Load projects from local storage
-    function loadProjects() {
-        projectContainer.innerHTML = '';
-        const projects = getProjects();
-        projects.forEach(project => {
-            const li = document.createElement('li');
-            li.innerHTML = `${project.name}: ${project.description}`;
-            li.addEventListener('click', () => {
-                openProjectPage(project);
-            });
-            projectContainer.appendChild(li);
+    // 프로젝트 리스트에 프로젝트 추가 함수
+    function addProjectToList(name, description) {
+        var projectContainer = document.getElementById('project-container');
+        var projectItem = document.createElement('li');
+        projectItem.classList.add('project-item');
+        projectItem.innerText = name;
+        projectItem.addEventListener('click', function () {
+            openModal(name, description);
+        });
+        projectContainer.appendChild(projectItem);
+    }
+
+    // 모달 열기 함수
+    function openModal(title, description) {
+        document.getElementById('modal-title').innerText = title;
+        document.getElementById('modal-description').innerHTML = description;
+        document.getElementById('modal-container').style.display = 'block';
+    }
+
+    // 모달 닫기 함수
+    window.closeModal = function () {
+        document.getElementById('modal-container').style.display = 'none';
+    };
+
+    // 네비게이션 링크 클릭 이벤트
+    document.getElementById('home-link').addEventListener('click', function () {
+        showSection('home');
+    });
+    document.getElementById('projects-link').addEventListener('click', function () {
+        showSection('project-list');
+    });
+    document.getElementById('create-link').addEventListener('click', function () {
+        showSection('create-project');
+    });
+
+    // 섹션 보여주기 함수
+    function showSection(sectionId) {
+        var sections = document.querySelectorAll('#content > div');
+        sections.forEach(function (section) {
+            if (section.id === sectionId) {
+                section.classList.remove('hidden');
+            } else {
+                section.classList.add('hidden');
+            }
         });
     }
-
-    function openProjectPage(project) {
-        const projectDetailURL = 'project-details.html?id=' + project.id;
-        window.location.href = projectDetailURL;
-    }
-
-    document.addEventListener('DOMContentLoaded', () => {
-        const params = new URLSearchParams(window.location.search);
-        const projectId = params.get('id');
-
-        const project = getProjectById(projectId);
-        if (project) {
-            displayProjectDetails(project);
-        } else {
-            const projectDetails = document.getElementById('project-details');
-            projectDetails.innerHTML = '<p>Project not found.</p>';
-        }
-    });
-
-    function getProjectById(projectId) {
-        const projects = getProjects();
-        return projects.find(project => project.id === projectId);
-    }
-
-    function displayProjectDetails(project) {
-        const projectNameElement = document.getElementById('project-name');
-        const projectDescriptionElement = document.getElementById('project-description');
-
-        projectNameElement.textContent = project.name;
-        projectDescriptionElement.innerHTML = project.description;
-    }
-
-    function saveProject(project) {
-        const projects = getProjects();
-        projects.push(project);
-        localStorage.setItem('projects', JSON.stringify(projects));
-    }
-
-    function getProjects() {
-        const projects = localStorage.getItem('projects');
-        return projects ? JSON.parse(projects) : [];
-    }
-
-    searchBar.addEventListener('input', () => {
-        homeSection.classList.add('hidden');
-        projectListSection.classList.remove('hidden');
-        createProjectSection.classList.add('hidden');
-        loadProjects();
-        const searchQuery = searchBar.value.toLowerCase();
-        const projects = getProjects();
-        projectContainer.innerHTML = '';
-        const filteredProjects = projects.filter(project => project.name.toLowerCase().includes(searchQuery));
-        filteredProjects.forEach(project => {
-            const li = document.createElement('li');
-            li.innerHTML = `${project.name}: ${project.description}`;
-            projectContainer.appendChild(li);
-        });
-    });
 });
