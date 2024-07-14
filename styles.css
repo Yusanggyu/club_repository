@@ -58,6 +58,7 @@ nav ul li a {
     width: 100%;
     max-width: 600px; /* Adjusted to fit better */
     margin: 0 auto; /* Center the search box */
+    border-radius: 30px;
 }
 
 .element-search-input .search {
