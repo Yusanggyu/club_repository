@@ -77,7 +77,6 @@ nav ul li a {
     overflow: hidden;
     text-overflow: ellipsis;
     display: -webkit-box;
-    -webkit-line-clamp: 1;
     -webkit-box-orient: vertical;
     font-style: var(--presets-body2-font-style);
 }
@@ -158,4 +157,8 @@ form input, form button {
     background-color: #f0f0f0;
     color: #333;
     cursor: pointer;
+}
+
+.ql-toolbar {
+    display: flex;
 }
