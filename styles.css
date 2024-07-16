@@ -87,7 +87,7 @@ nav ul li a {
 
 /* Content styling */
 #content {
-    padding: 100px 2em 2em; /* Adjusted to push content below fixed elements */
+    padding: 120px 2em 2em; /* Adjusted to push content below fixed elements */
 }
 
 form {
