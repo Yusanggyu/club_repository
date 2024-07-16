@@ -162,3 +162,39 @@ form input, form button {
 .ql-toolbar {
     display: flex;
 }
+.project-item {
+    display: flex;
+    align-items: center;
+    padding: 15px;
+    margin: 10px 0;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.project-item:hover {
+    background-color: #f0f0f0;
+    cursor: pointer;
+}
+
+.project-item img {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    border-radius: 4px;
+    margin-right: 15px;
+}
+
+.project-item .content {
+    display: flex;
+    flex-direction: column;
+}
+
+.project-item .title {
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.project-item .description {
+    color: #555;
+}

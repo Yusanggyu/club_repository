@@ -1,6 +1,7 @@
 document.addEventListener('DOMContentLoaded', function () {
     // 프로젝트 데이터 저장용 배열
     var projects = [];
+    var projectItems = {}; // 프로젝트 항목을 저장할 객체
 
     // Quill editor 설정
     var quill = new Quill('#editor-container', {
@@ -24,8 +25,9 @@ document.addEventListener('DOMContentLoaded', function () {
         e.preventDefault();
         var projectName = document.getElementById('project-name').value;
         var projectDescription = quill.root.innerHTML;
+        var projectImages = quill.getContents().ops.filter(op => op.insert && op.insert.image).map(op => op.insert.image);
 
-        addProjectToList(projectName, projectDescription);
+        addProjectToList(projectName, projectDescription, projectImages);
 
         // 폼 초기화
         document.getElementById('project-name').value = '';
@@ -33,10 +35,47 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     // 프로젝트 리스트에 프로젝트 추가 함수
-    function addProjectToList(name, description) {
+    function addProjectToList(name, description, images) {
         // 프로젝트 데이터 배열에 추가
-        projects.push({ name: name, description: description });
+        var project = { name: name, description: description, images: images };
+        projects.push(project);
+        var projectItem = createProjectItem(project);
+        projectItems[name] = projectItem;
         updateProjectList();
+    }
+
+    // 프로젝트 항목 생성 함수
+    function createProjectItem(project) {
+        var projectItem = document.createElement('li');
+        projectItem.classList.add('project-item');
+
+        var img = document.createElement('img');
+        if (project.images.length > 0) {
+            img.src = project.images[0]; // 첫 번째 이미지를 사용
+        }
+
+        var content = document.createElement('div');
+        content.classList.add('content');
+
+        var title = document.createElement('div');
+        title.classList.add('title');
+        title.innerText = project.name;
+
+        var desc = document.createElement('div');
+        desc.classList.add('description');
+        desc.innerText = stripHtml(project.description);
+
+        content.appendChild(title);
+        content.appendChild(desc);
+
+        projectItem.appendChild(img);
+        projectItem.appendChild(content);
+
+        projectItem.addEventListener('click', function () {
+            openModal(project.name, project.description);
+        });
+
+        return projectItem;
     }
 
     // 프로젝트 리스트 업데이트 함수
@@ -44,14 +83,27 @@ document.addEventListener('DOMContentLoaded', function () {
         var projectContainer = document.getElementById('project-container');
         projectContainer.innerHTML = '';
         projects.forEach(function (project) {
-            var projectItem = document.createElement('li');
-            projectItem.classList.add('project-item');
-            projectItem.innerText = project.name;
-            projectItem.addEventListener('click', function () {
-                openModal(project.name, project.description);
-            });
+            var projectItem = projectItems[project.name];
             projectContainer.appendChild(projectItem);
         });
+    }
+
+    // 프로젝트 필터링 함수
+    function filterProjects(query) {
+        var projectContainer = document.getElementById('project-container');
+        projectContainer.innerHTML = '';
+        projects.forEach(function (project) {
+            if (project.name.toLowerCase().includes(query)) {
+                var projectItem = projectItems[project.name];
+                projectContainer.appendChild(projectItem);
+            }
+        });
+    }
+
+    // HTML 태그 제거 함수
+    function stripHtml(html) {
+        var doc = new DOMParser().parseFromString(html, 'text/html');
+        return doc.body.textContent || "";
     }
 
     // 모달 열기 함수
@@ -96,22 +148,4 @@ document.addEventListener('DOMContentLoaded', function () {
         showSection('project-list');
         filterProjects(searchQuery);
     });
-
-    // 프로젝트 필터링 함수
-    function filterProjects(query) {
-        var projectContainer = document.getElementById('project-container');
-        projectContainer.innerHTML = '';
-        var filteredProjects = projects.filter(function (project) {
-            return project.name.toLowerCase().includes(query);
-        });
-        filteredProjects.forEach(function (project) {
-            var projectItem = document.createElement('li');
-            projectItem.classList.add('project-item');
-            projectItem.innerText = project.name;
-            projectItem.addEventListener('click', function () {
-                openModal(project.name, project.description);
-            });
-            projectContainer.appendChild(projectItem);
-        });
-    }
 });
