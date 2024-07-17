@@ -25,13 +25,9 @@ document.addEventListener('DOMContentLoaded', function () {
         e.preventDefault();
         var projectName = document.getElementById('project-name').value;
         var projectDescription = quill.root.innerHTML;
-        var projectImages = quill.getContents().ops.filter(op => op.insert && op.insert.image).map(op => op.insert.image);
 
-        addProjectToList(projectName, projectDescription, projectImages);
-
-        // 폼 초기화
-        document.getElementById('project-name').value = '';
-        quill.root.innerHTML = '';
+        // 확인 팝업 열기
+        showConfirmationPopup(projectName, projectDescription);
     });
 
     // 프로젝트 리스트에 프로젝트 추가 함수
@@ -117,6 +113,39 @@ document.addEventListener('DOMContentLoaded', function () {
     window.closeModal = function () {
         document.getElementById('modal-container').style.display = 'none';
     };
+
+    // 확인 팝업 열기 함수
+    function showConfirmationPopup(name, description) {
+        var confirmationPopup = document.createElement('div');
+        confirmationPopup.classList.add('confirmation-popup');
+
+        var confirmationMessage = document.createElement('p');
+        confirmationMessage.innerText = '프로젝트를 만들겠습니까?';
+
+        var yesButton = document.createElement('button');
+        yesButton.innerText = '예';
+        yesButton.addEventListener('click', function () {
+            addProjectToList(name, description, []);
+            document.body.removeChild(confirmationPopup);
+            // 폼 초기화
+            document.getElementById('project-name').value = '';
+            quill.root.innerHTML = '';
+            // Home 페이지로 이동
+            showSection('home');
+        });
+
+        var noButton = document.createElement('button');
+        noButton.innerText = '아니오';
+        noButton.addEventListener('click', function () {
+            document.body.removeChild(confirmationPopup);
+        });
+
+        confirmationPopup.appendChild(confirmationMessage);
+        confirmationPopup.appendChild(yesButton);
+        confirmationPopup.appendChild(noButton);
+
+        document.body.appendChild(confirmationPopup);
+    }
 
     // 네비게이션 링크 클릭 이벤트
     document.getElementById('home-link').addEventListener('click', function () {
