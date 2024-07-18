@@ -102,6 +102,30 @@ document.addEventListener('DOMContentLoaded', function () {
         return doc.body.textContent || "";
     }
 
+    function getProjectById(projectId) {
+        const projects = getProjects();
+        return projects.find(project => project.id === projectId);
+    }
+
+    function displayProjectDetails(project) {
+        const projectNameElement = document.getElementById('project-name');
+        const projectDescriptionElement = document.getElementById('project-description');
+
+        projectNameElement.textContent = project.name;
+        projectDescriptionElement.innerHTML = project.description;
+    }
+
+    function saveProject(project) {
+        const projects = getProjects();
+        projects.push(project);
+        localStorage.setItem('projects', JSON.stringify(projects));
+    }
+
+    function getProjects() {
+        const projects = localStorage.getItem('projects');
+        return projects ? JSON.parse(projects) : [];
+    }
+
     // 모달 열기 함수
     function openModal(title, description) {
         document.getElementById('modal-title').innerText = title;
