@@ -38,6 +38,7 @@ nav ul li a {
 .header {
     position: fixed;
     top: 0;
+    left: 0;
     width: 100%;
     z-index: 2; /* Ensure it stays on top of the nav bar */
 }
@@ -217,3 +218,4 @@ form input, form button {
 .confirmation-popup button {
     margin-right: 10px;
 }
+
